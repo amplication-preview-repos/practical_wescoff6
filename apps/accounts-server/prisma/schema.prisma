@@ -1,0 +1,100 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model GeneralLedger {
+  accountName String?
+  balance     Float?
+  createdAt   DateTime @default(now())
+  description String?
+  id          String   @id @default(cuid())
+  updatedAt   DateTime @updatedAt
+}
+
+model AccountsPayable {
+  amount    Float?
+  createdAt DateTime                   @default(now())
+  dueDate   DateTime?
+  id        String                     @id @default(cuid())
+  status    EnumAccountsPayableStatus?
+  updatedAt DateTime                   @updatedAt
+  vendorId  String?
+}
+
+model Tax {
+  amount    Float?
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  rate      Float?
+  taxName   String?
+  updatedAt DateTime @updatedAt
+}
+
+model Inventory {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  itemName  String?
+  location  String?
+  quantity  Int?
+  updatedAt DateTime @updatedAt
+}
+
+model Budget {
+  amount     Float?
+  budgetName String?
+  createdAt  DateTime  @default(now())
+  endDate    DateTime?
+  id         String    @id @default(cuid())
+  startDate  DateTime?
+  updatedAt  DateTime  @updatedAt
+}
+
+model FixedAsset {
+  assetName   String?
+  createdAt   DateTime @default(now())
+  description String?
+  id          String   @id @default(cuid())
+  updatedAt   DateTime @updatedAt
+  value       Float?
+}
+
+model Compliance {
+  complianceDate DateTime?
+  createdAt      DateTime  @default(now())
+  description    String?
+  id             String    @id @default(cuid())
+  standardName   String?
+  updatedAt      DateTime  @updatedAt
+}
+
+model AccountsReceivable {
+  amount     Float?
+  createdAt  DateTime                      @default(now())
+  customerId String?
+  dueDate    DateTime?
+  id         String                        @id @default(cuid())
+  status     EnumAccountsReceivableStatus?
+  updatedAt  DateTime                      @updatedAt
+}
+
+model FinancialReport {
+  createdAt  DateTime  @default(now())
+  details    String?
+  id         String    @id @default(cuid())
+  period     DateTime?
+  reportName String?
+  updatedAt  DateTime  @updatedAt
+}
+
+enum EnumAccountsPayableStatus {
+  Option1
+}
+
+enum EnumAccountsReceivableStatus {
+  Option1
+}
