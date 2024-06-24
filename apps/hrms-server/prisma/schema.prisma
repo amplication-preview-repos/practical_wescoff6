@@ -1,0 +1,160 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Employee {
+  attendances  Attendance[]
+  benefits     Benefit[]
+  createdAt    DateTime      @default(now())
+  dateOfBirth  DateTime?
+  email        String?
+  firstName    String?
+  hireDate     DateTime?
+  id           String        @id @default(cuid())
+  lastName     String?
+  leaves       Leave[]
+  payrolls     Payroll[]
+  performances Performance[]
+  phone        String?
+  selfServices SelfService[]
+  talents      Talent[]
+  updatedAt    DateTime      @updatedAt
+  workforces   Workforce[]
+}
+
+model Job {
+  applications Application[]
+  createdAt    DateTime      @default(now())
+  department   String?
+  description  String?
+  id           String        @id @default(cuid())
+  location     String?
+  title        String?
+  updatedAt    DateTime      @updatedAt
+}
+
+model Application {
+  applicantName String?
+  createdAt     DateTime               @default(now())
+  email         String?
+  id            String                 @id @default(cuid())
+  job           Job?                   @relation(fields: [jobId], references: [id])
+  jobId         String?
+  status        EnumApplicationStatus?
+  updatedAt     DateTime               @updatedAt
+}
+
+model Workforce {
+  budget     Float?
+  createdAt  DateTime  @default(now())
+  employee   Employee? @relation(fields: [employeeId], references: [id])
+  employeeId String?
+  id         String    @id @default(cuid())
+  schedule   Json?
+  updatedAt  DateTime  @updatedAt
+}
+
+model Performance {
+  comments   String?
+  createdAt  DateTime  @default(now())
+  employee   Employee? @relation(fields: [employeeId], references: [id])
+  employeeId String?
+  id         String    @id @default(cuid())
+  reviewDate DateTime?
+  score      Float?
+  updatedAt  DateTime  @updatedAt
+}
+
+model Payroll {
+  amount     Float?
+  createdAt  DateTime           @default(now())
+  employee   Employee?          @relation(fields: [employeeId], references: [id])
+  employeeId String?
+  id         String             @id @default(cuid())
+  payDate    DateTime?
+  status     EnumPayrollStatus?
+  updatedAt  DateTime           @updatedAt
+}
+
+model Benefit {
+  benefitType EnumBenefitBenefitType?
+  createdAt   DateTime                @default(now())
+  employee    Employee?               @relation(fields: [employeeId], references: [id])
+  employeeId  String?
+  endDate     DateTime?
+  id          String                  @id @default(cuid())
+  startDate   DateTime?
+  updatedAt   DateTime                @updatedAt
+}
+
+model Leave {
+  createdAt  DateTime            @default(now())
+  employee   Employee?           @relation(fields: [employeeId], references: [id])
+  employeeId String?
+  endDate    DateTime?
+  id         String              @id @default(cuid())
+  leaveType  EnumLeaveLeaveType?
+  startDate  DateTime?
+  status     EnumLeaveStatus?
+  updatedAt  DateTime            @updatedAt
+}
+
+model Talent {
+  createdAt  DateTime             @default(now())
+  employee   Employee?            @relation(fields: [employeeId], references: [id])
+  employeeId String?
+  goal       String?
+  id         String               @id @default(cuid())
+  position   String?
+  potential  EnumTalentPotential?
+  updatedAt  DateTime             @updatedAt
+}
+
+model Attendance {
+  checkInTime  DateTime?
+  checkOutTime DateTime?
+  createdAt    DateTime  @default(now())
+  date         DateTime?
+  employee     Employee? @relation(fields: [employeeId], references: [id])
+  employeeId   String?
+  id           String    @id @default(cuid())
+  updatedAt    DateTime  @updatedAt
+}
+
+model SelfService {
+  createdAt     DateTime  @default(now())
+  employee      Employee? @relation(fields: [employeeId], references: [id])
+  employeeId    String?
+  functionality String?
+  id            String    @id @default(cuid())
+  updatedAt     DateTime  @updatedAt
+}
+
+enum EnumApplicationStatus {
+  Option1
+}
+
+enum EnumPayrollStatus {
+  Option1
+}
+
+enum EnumBenefitBenefitType {
+  Option1
+}
+
+enum EnumLeaveLeaveType {
+  Option1
+}
+
+enum EnumLeaveStatus {
+  Option1
+}
+
+enum EnumTalentPotential {
+  Option1
+}
